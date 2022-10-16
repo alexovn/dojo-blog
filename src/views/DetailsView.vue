@@ -14,13 +14,17 @@
     <div v-else>
       <Spinner />
     </div>
+    <button @click="handleDelete" :style="{ margin: '10px auto' }">
+      delete post
+    </button>
   </div>
 </template>
 
 <script>
 import getPost from '@/composables/getPost';
 import Spinner from '@/components/Spinner.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { projectFirestore } from '../firebase/config';
 
 export default {
   components: {
@@ -29,14 +33,26 @@ export default {
 
   setup () {
     const route = useRoute();
+    const router = useRouter();
     
     const { post, error, load } = getPost(route.params.id);
 
     load();
 
+    const handleDelete = async () => {
+      await projectFirestore.collection('posts')
+        .doc(route.params.id)
+        .delete();
+
+      router.push({
+        name: 'home'
+      })
+    }
+
     return {
       post,
-      error
+      error,
+      handleDelete 
     }
   }
 }

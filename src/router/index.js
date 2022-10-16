@@ -25,6 +25,11 @@ const router = createRouter({
       name: 'tag',
       component: () => import('../views/TagView.vue'),
       props: true
+    },
+    {
+      path: '/realtime',
+      name: 'realtime',
+      component: () => import('../views/RealTime.vue')
     }
   ]
 })
